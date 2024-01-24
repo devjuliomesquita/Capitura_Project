@@ -224,3 +224,178 @@ components:
           $ref: "#/components/schemas/QueryResponsePagination"
       required:
         - pagination
+
+# Modelagem das entidades
+
+    SkillId:
+      description: todo
+      $ref: "#/components/schemas/IdAsUUID"
+      nullable: false
+
+    Skill:
+      description: todo
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/SkillId"
+        title:
+          type: string
+          pattern: '^([a-zA-ZÀ-ÿ0-9#$%&@\*\(\)\[\]\{\}\-+_=\:;,\.\\\/<>\?\!\s\u00AA\u00B0\u00BA\u00A7\u002D\u2010\u2011\u2012\u2013\u2014]){1,8000}$'
+          nullable: false
+          minLength: 3
+          maxLength: 100
+      required:
+        - title
+
+    JobsId:
+      description: todo
+      $ref: "#/components/schemas/IdAsUUID"
+      nullable: false
+
+    WorkModalitiesTypes:
+      description: todo.
+      type: string
+      enum:
+        - PRESENCIAL
+        - HIBRIDO
+        - REMOTO
+
+    RoleTypes:
+      description: todo.
+      type: string
+      enum:
+        - ESTAGIARIO
+        - TRAINEE
+        - JUNIOR
+        - JUNIOR_PLENO
+        - PLENO
+        - PLENO_SENIOR
+        - SENIOR
+        - TECHLEAD
+        - COORDENADOR
+        - GERENTE
+
+    Jobs:
+      description: todo
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/JobsId"
+        title:
+          type: string
+          pattern: '^([a-zA-ZÀ-ÿ0-9#$%&@\*\(\)\[\]\{\}\-+_=\:;,\.\\\/<>\?\!\s\u00AA\u00B0\u00BA\u00A7\u002D\u2010\u2011\u2012\u2013\u2014]){1,8000}$'
+          nullable: false
+          minLength: 3
+          maxLength: 100
+        description:
+          type: string
+          pattern: '^([a-zA-ZÀ-ÿ0-9#$%&@\*\(\)\[\]\{\}\-+_=\:;,\.\\\/<>\?\!\s\u00AA\u00B0\u00BA\u00A7\u002D\u2010\u2011\u2012\u2013\u2014]){1,8000}$'
+          nullable: false
+          minLength: 3
+          maxLength: 8000
+        startDate:
+          type: string
+          nullable: false
+          minLength: 10
+          maxLength: 10
+          pattern: '^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$'
+        WorkModalitiesTypes:
+          $ref: "#/components/schemas/WorkModalitiesTypes"
+        RoleTypes:
+          $ref: "#/components/schemas/RoleTypes"
+        salary:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 100
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/Skill"
+          nullable: false
+          minItems: 0
+          maxItems: 2147483647
+      required:
+        - Id
+        - title
+        - description
+        - startDate
+        - skills
+
+    InstitutionId:
+      description: todo
+      $ref: "#/components/schemas/IdAsUUID"
+      nullable: false
+
+
+    GeneralInformation:
+      description: todo
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: '^([a-zA-ZÀ-ÿ0-9#$%&@\*\(\)\[\]\{\}\-+_=\:;,\.\\\/<>\?\!\s\u00AA\u00B0\u00BA\u00A7\u002D\u2010\u2011\u2012\u2013\u2014]){1,8000}$'
+          nullable: false
+          minLength: 3
+          maxLength: 100
+        description:
+          type: string
+          pattern: '^([a-zA-ZÀ-ÿ0-9#$%&@\*\(\)\[\]\{\}\-+_=\:;,\.\\\/<>\?\!\s\u00AA\u00B0\u00BA\u00A7\u002D\u2010\u2011\u2012\u2013\u2014]){1,8000}$'
+          nullable: false
+          minLength: 3
+          maxLength: 8000
+        site:
+          type: string
+          nullable: false
+          minLength: 5
+          maxLength: 128
+        cnpj:
+          type: string
+          pattern: "^\d{2}\.\d{3}\.\d{3}/0001-\d{2}$"
+          nullable: false
+          minLength: 3
+          maxLength: 100
+        startDate:
+          type: string
+          nullable: false
+          minLength: 10
+          maxLength: 10
+          pattern: '^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$'
+        sector:
+          type: string
+          nullable: false
+          minLength: 5
+          maxLength: 128
+      required:
+        - name
+        - description
+        - startDate
+
+# Post e Put
+    InstitutionRequest:
+      description: todo
+      type: object
+      properties:
+        generalInformation:
+          $ref: "#/components/schemas/GeneralInformation"
+          nullable: false
+        jobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Jobs"
+          nullable: false
+          minItems: 0
+          maxItems: 2147483647
+      required:
+       - generalInformation
+       - jobs
+
+    InstitutionResponse:
+      description: todo
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/InstitutionRequest"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/InstitutionId"
