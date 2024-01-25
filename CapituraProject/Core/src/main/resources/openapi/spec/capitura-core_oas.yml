@@ -399,3 +399,78 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/InstitutionId"
+
+
+  responses:
+    400BadRequest:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            withError400:
+              $ref: "#/components/examples/ResponseWithError400"
+    401Unauthorized:
+      description: todo
+      content:
+        application/problem+json:
+          $ref: "#/components/schemas/Problem"
+        examples:
+          withError401:
+            $ref: "#/components/examples/ResponseWithError401"
+    403Forbidden:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    404NotFound:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    409Conflict:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    500InternalServerError:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    GeneralError:
+      description: todo
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+  examples:
+    ResponseWithError400:
+      summary: Client Error.
+      description: Example of client Error.
+      value:
+        {
+          "type": "https://capiture/problem/client-error",
+          "title": "Client Error",
+          "status": 400,
+          "detail": "Invalid request.",
+          "instance": "string",
+        }
+    ResponseWithError401:
+      summary: Client Error
+      description: todo
+      value:
+        {
+          "type": "https://www.capiture.com.br/api/problem/security/user-not-authenticated",
+          "title": "Not Authenticated",
+          "status": 401,
+          "detail": "User is not Authenticated.",
+          "instance": "string",
+        }
