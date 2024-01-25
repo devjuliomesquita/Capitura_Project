@@ -18,7 +18,7 @@ externalDocs:
   description: Capitura - Project - Documentação
   url: juliocesarmcamilo@gmail.com
 servers:
-  - url: "{protocol}://{devServerHost}:{devServerPort}/api/seict-comprac/v1"
+  - url: "{protocol}://{devServerHost}:{devServerPort}/api/capitura/v1"
     description: development instance
     variables:
       protocol:
@@ -45,9 +45,25 @@ tags:
   - name: User Profile - Capitura
     description: Managing your profile for job opportunities.
 
+
+paths:
+  /security/manifest:
+    get:
+      tags:
+        - Back Office - Capitura
+      summary: todo
+      description: todo
+      operationId: getManifest
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
 components:
   schemas:
-#    Criando um objeto do tipo problema
+    #    Criando um objeto do tipo problema
     Problem:
       description: todo
       type: object
@@ -98,7 +114,7 @@ components:
           minLength: 1
           maxLength: 2147483647
 
-#    Criando um UUID
+    #    Criando um UUID
     IdAsUUID:
       description: type of id used in the system.
       type: string
@@ -106,8 +122,8 @@ components:
       minLength: 36
       maxLength: 36
 
-#    Criando os tipos de Queries
-#    Padrão de organização
+    #    Criando os tipos de Queries
+    #    Padrão de organização
     QuerySortItem:
       description: todo
       properties:
@@ -119,7 +135,7 @@ components:
           maxLength: 128
         value:
           type: string
-          enum: [ASC, DESC]
+          enum: [ ASC, DESC ]
           nullable: false
           default: "ASC"
       required:
@@ -176,7 +192,7 @@ components:
         - pageNumber
         - pageSize
 
-#    Query Request
+    #    Query Request
     QueryRequest:
       description: todo
       type: object
@@ -192,7 +208,7 @@ components:
         sort:
           $ref: "#/components/schemas/QueryRequestSort"
 
-#    Query Response
+    #    Query Response
     QueryResponsePagination:
       description: todo
       allOf:
@@ -225,7 +241,7 @@ components:
       required:
         - pagination
 
-# Modelagem das entidades
+    # Modelagem das entidades
 
     SkillId:
       description: todo
@@ -322,13 +338,20 @@ components:
         - startDate
         - skills
 
+    InstitutionEntityKeys:
+      description: todo.
+      type: string
+      enum:
+        - INSTITUTION_GENERAL_INFO
+        - JOBS
+
     InstitutionId:
       description: todo
       $ref: "#/components/schemas/IdAsUUID"
       nullable: false
 
 
-    GeneralInformation:
+    InstitutionGeneralInformation:
       description: todo
       type: object
       properties:
@@ -351,7 +374,7 @@ components:
           maxLength: 128
         cnpj:
           type: string
-          pattern: "^\d{2}\.\d{3}\.\d{3}/0001-\d{2}$"
+          pattern: '^\d{2}\.\d{3}\.\d{3}/0001-\d{2}$'
           nullable: false
           minLength: 3
           maxLength: 100
@@ -371,13 +394,13 @@ components:
         - description
         - startDate
 
-# Post e Put
+    # Post e Put
     InstitutionRequest:
       description: todo
       type: object
       properties:
         generalInformation:
-          $ref: "#/components/schemas/GeneralInformation"
+          $ref: "#/components/schemas/InstitutionGeneralInformation"
           nullable: false
         jobs:
           type: array
@@ -387,8 +410,8 @@ components:
           minItems: 0
           maxItems: 2147483647
       required:
-       - generalInformation
-       - jobs
+        - generalInformation
+        - jobs
 
     InstitutionResponse:
       description: todo
@@ -400,6 +423,58 @@ components:
             id:
               $ref: "#/components/schemas/InstitutionId"
 
+    InstitutionPatchTransportPayload:
+      description: todo
+      type: object
+      properties:
+        generalInformation:
+          $ref: "#/components/schemas/InstitutionGeneralInformation"
+          nullable: false
+        jobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Jobs"
+          nullable: false
+          minItems: 0
+          maxItems: 2147483647
+
+
+
+    InstituionPatchRequest:
+      description: todo
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstitutionEntityKeys"
+          nullable: false
+          minItems: 1
+          maxItems: 2
+        payload:
+          $ref: "#/components/schemas/InstitutionPatchTransportPayload"
+          nullable: false
+      required:
+        - keys
+        - payload
+
+    InstitutionPatchResponse:
+      description: todo
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstitutionEntityKeys"
+          nullable: false
+          minItems: 1
+          maxItems: 2
+        payload:
+          $ref: "#/components/schemas/InstitutionPatchTransportPayload"
+          nullable: false
+      required:
+        - keys
+        - payload
 
   responses:
     400BadRequest:
@@ -415,10 +490,8 @@ components:
       description: todo
       content:
         application/problem+json:
-          $ref: "#/components/schemas/Problem"
-        examples:
-          withError401:
-            $ref: "#/components/examples/ResponseWithError401"
+          schema:
+            $ref: "#/components/schemas/Problem"
     403Forbidden:
       description: todo
       content:
@@ -450,7 +523,6 @@ components:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/Problem"
-
   examples:
     ResponseWithError400:
       summary: Client Error.
